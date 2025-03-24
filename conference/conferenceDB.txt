@@ -1,0 +1,274 @@
+drop database if exists conferenceDB;
+create database conferenceDB;
+use conferenceDB;
+
+CREATE TABLE CommitteeMember(
+  committeeMemberID INT NOT NULL,
+  firstName         VARCHAR(30) NOT NULL,
+  lastName          VARCHAR(30) NOT NULL,
+  PRIMARY KEY(committeeMemberID)
+);
+
+CREATE TABLE SponsorCompany(
+  companyName  VARCHAR(50) NOT NULL,
+  sponsorLevel ENUM('Platinum','Gold','Silver','Bronze') NOT NULL,
+  emailsSent   INT NOT NULL DEFAULT 0,
+  PRIMARY KEY(companyName)
+);
+
+CREATE TABLE Attendee(
+  attendeeID INT NOT NULL,
+  firstName  VARCHAR(30) NOT NULL,
+  lastName   VARCHAR(30) NOT NULL,
+  email      VARCHAR(50) NOT NULL,
+  PRIMARY KEY(attendeeID)
+);
+
+CREATE TABLE HotelRoom(
+  roomNumber INT NOT NULL,
+  numBeds    INT NOT NULL,
+  PRIMARY KEY(roomNumber)
+);
+
+CREATE TABLE Session(
+  sessionID   INT NOT NULL,
+  sessionName VARCHAR(50) NOT NULL,
+  startTime   DATETIME NOT NULL,
+  endTime     DATETIME NOT NULL,
+  room        VARCHAR(50) NOT NULL, 
+  PRIMARY KEY(sessionID)
+);
+
+CREATE TABLE SubCommittee(
+  subCommitteeName VARCHAR(50) NOT NULL,
+  chairID          INT NOT NULL,  
+  PRIMARY KEY(subCommitteeName),
+  FOREIGN KEY(chairID) REFERENCES CommitteeMember(committeeMemberID)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE SubCommitteeMember(
+  subCommitteeName  VARCHAR(50) NOT NULL,
+  committeeMemberID INT NOT NULL,
+  PRIMARY KEY(subCommitteeName, committeeMemberID),
+  FOREIGN KEY(subCommitteeName) REFERENCES SubCommittee(subCommitteeName)
+    ON DELETE CASCADE,
+  FOREIGN KEY(committeeMemberID) REFERENCES CommitteeMember(committeeMemberID)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE Student(
+  attendeeID INT NOT NULL,
+  roomNumber INT NULL,           
+  PRIMARY KEY(attendeeID),
+  FOREIGN KEY(attendeeID) REFERENCES Attendee(attendeeID)
+    ON DELETE CASCADE,
+  FOREIGN KEY(roomNumber) REFERENCES HotelRoom(roomNumber)
+);
+
+CREATE TABLE Professional(
+  attendeeID INT NOT NULL,
+  PRIMARY KEY(attendeeID),
+  FOREIGN KEY(attendeeID) REFERENCES Attendee(attendeeID)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE Sponsor(
+  attendeeID   INT NOT NULL,
+  companyName  VARCHAR(50) NOT NULL,
+  PRIMARY KEY(attendeeID),
+  FOREIGN KEY(attendeeID) REFERENCES Attendee(attendeeID)
+    ON DELETE CASCADE,
+  FOREIGN KEY(companyName) REFERENCES SponsorCompany(companyName)
+);
+
+CREATE TABLE JobAd(
+  companyName  VARCHAR(50) NOT NULL,
+  jobAdID      INT         NOT NULL, 
+  title        VARCHAR(100)NOT NULL,
+  city         VARCHAR(50) NOT NULL,
+  province     VARCHAR(50) NOT NULL,
+  payRate      DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY(companyName, jobAdID),
+  FOREIGN KEY(companyName) REFERENCES SponsorCompany(companyName)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE SpeaksAt(
+  attendeeID INT NOT NULL,
+  sessionID  INT NOT NULL,
+  PRIMARY KEY(attendeeID, sessionID),
+  FOREIGN KEY(attendeeID) REFERENCES Attendee(attendeeID)
+    ON DELETE CASCADE,
+  FOREIGN KEY(sessionID) REFERENCES Session(sessionID)
+    ON DELETE CASCADE
+);
+
+-- CommitteeMember(committeeMemberID, firstName, lastName)
+
+INSERT INTO CommitteeMember VALUES
+(100, 'Steve',    'Stone'),
+(101, 'Alex',     'Block'),
+(102, 'Herobrine','Myth'),
+(103, 'Ender',    'Man'),
+(104, 'Zombie',   'Rotten'),
+(105, 'Creeper',  'Boom'),
+(106, 'Ghast',    'Float'),
+(107, 'Wither',   'Storm');
+
+-- SponsorCompany(companyName, sponsorLevel, emailsSent)
+
+INSERT INTO SponsorCompany VALUES
+('TechCorp',       'Platinum', 0),
+('HealthPlus',     'Gold',     1),
+('EduSupport',     'Silver',   2),
+('GreenInit',      'Bronze',   0),
+('SoftSolutions',  'Gold',     3),
+('FutureVision',   'Platinum', 4),
+('ByteWorks',      'Gold',     2),
+('AlphaPixels',    'Bronze',   1);
+
+-- Attendee(attendeeID, firstName, lastName, email)
+
+INSERT INTO Attendee VALUES
+(200, 'Creeper',    'Green',    'greencreeper@gmail.com'),
+(201, 'Alex',       'Block',    'alexplaysmc@gmail.com'),
+(202, 'Ender',      'Man',      'enderman@outlook.com'),
+(203, 'Ghast',      'Float',    'ghastlyfloating@outlook.ca'),
+(204, 'Zombie',     'Rotten',   'rottenflesh@mc.co.uk'),
+(205, 'Skeleton',   'Bone',     'skellythekelly@gmail.com'),
+(206, 'Blaze',      'Burn',     'blazefromnether@gmail.com'),
+(207, 'Herobrine',  'Myth',     '21ioi1@queensu.ca'),
+(208, 'Villager',   'Wheat',    'villager200@gmail.com'),
+(209, 'Slime',      'Cube',     'slimecube@gmail.com'),
+(210, 'Dragon',     'Egg',      'dragonegg@gmail.com'),
+(211, 'Silverfish', 'Bug',      'silverfishbug@gmail.com'),
+(212, 'Wolf',       'Dog',      'dogwolf@gmail.com'),
+(213, 'Pillager',   'Crossbow', 'Pillagercrossbow@gmail.com'),
+(214, 'Ravager',    'Roar',     'ravagerroar@gmail.com'),
+(215, 'Glow',       'Squid',    'squidglow@gmail.com'),
+(216, 'Allay',      'Help',     'allay@gmail.com'),
+(217, 'Axolotl',    'Cute',     'Axolotl100@gmail.com'),
+(218, 'Guardian',   'Temple',   'theguradian@gmail.com'),
+(219, 'Piglin',     'Snout',    'mrpiglin@gmail.com'),
+(220, 'Witch',      'Potion',   'witch2320@gmail.com'),
+(221, 'Fox',        'Den',      'foxdenhouse@gmail.com'),
+(222, 'Bee',        'Buzz',     'beebuzz@gmail.com'),
+(223, 'Mooshroom',  'Cow',      'mooshroomfable@gmail.com');
+
+-- HotelRoom(roomNumber, numBeds)
+
+INSERT INTO HotelRoom VALUES
+(300, 1),
+(301, 2),
+(302, 2),
+(303, 2),
+(304, 1),
+(305, 2),
+(306, 2),
+(307, 1);
+
+-- Session(sessionID, sessionName, startTime, endTime, room)
+
+INSERT INTO Session VALUES
+(400, 'Keynote Address',   '2025-02-10 09:00:00', '2025-02-10 10:00:00', 'Toronto Hall A'),
+(401, 'AI Innovations',    '2025-02-10 10:15:00', '2025-02-10 11:45:00', 'Toronto Hall B'),
+(402, 'Data Security',     '2025-02-10 10:15:00', '2025-02-10 11:45:00', 'Toronto Hall C'),
+(403, 'Networking Lunch',  '2025-02-10 12:00:00', '2025-02-10 13:00:00', 'City Center Food Court'),
+(404, 'Cloud Computing',   '2025-02-10 13:15:00', '2025-02-10 14:30:00', 'Toronto Hall B'),
+(405, 'Closing Remarks',   '2025-02-10 16:00:00', '2025-02-10 17:00:00', 'Toronto Hall A'),
+(406, 'Machine Learning',  '2025-02-11 09:00:00', '2025-02-11 10:00:00', 'Toronto Hall D'),
+(407, 'Panel Discussion',  '2025-02-11 10:15:00', '2025-02-11 11:00:00', 'Toronto Hall E');
+
+-- SubCommittee(subCommitteeName, chairID)
+
+INSERT INTO SubCommittee VALUES
+('Program Committee',       100),
+('Registration Committee',  101),
+('Sponsorship Committee',   102),
+('Logistics Committee',     103),
+('Marketing Committee',     104),
+('IT Committee',            105),
+('Volunteer Committee',     106),
+('Finance Committee',       107);
+
+-- SubCommitteeMember(subCommitteeName, committeeMemberID)
+
+INSERT INTO SubCommitteeMember VALUES
+('Program Committee',       100),
+('Program Committee',       104),
+('Registration Committee',  101),
+('Registration Committee',  105),
+('Sponsorship Committee',   102),
+('Sponsorship Committee',   106),
+('Logistics Committee',     103),
+('Logistics Committee',     107),
+('Sponsorship Committee',   104),
+('Program Committee',       105),
+('Marketing Committee',     104),
+('Marketing Committee',     100),
+('IT Committee',            105),
+('IT Committee',            101),
+('Volunteer Committee',     106),
+('Finance Committee',       107),
+('Finance Committee',       103);
+
+-- Student(attendeeID, roomNumber)
+
+INSERT INTO Student VALUES
+(200, 300),
+(201, 301),
+(202, 301),
+(203, NULL),
+(209, 305),
+(210, 306),
+(211, NULL),
+(212, NULL);
+
+-- Professional(attendeeID)
+
+INSERT INTO Professional VALUES
+(204),
+(205),
+(206),
+(213),
+(214),
+(215),
+(216),
+(217);
+
+-- Sponsor(attendeeID, companyName)
+
+INSERT INTO Sponsor VALUES
+(207, 'TechCorp'),
+(208, 'SoftSolutions'),
+(218, 'ByteWorks'),
+(219, 'AlphaPixels'),
+(220, 'TechCorp'),
+(221, 'HealthPlus'),
+(222, 'EduSupport'),
+(223, 'GreenInit');
+
+-- JobAd(companyName, jobAdID, title, city, province, payRate)
+
+INSERT INTO JobAd VALUES
+('TechCorp',       500, 'Software Engineer', 'Toronto', 'ON', 85000.00),
+('TechCorp',       501, 'Data Analyst',      'Toronto', 'ON', 75000.00),
+('HealthPlus',     502, 'Project Manager',   'Toronto', 'ON', 92000.00),
+('EduSupport',     503, 'UI/UX Designer',    'Toronto', 'ON', 68000.00),
+('SoftSolutions',  504, 'QA Specialist',     'Toronto', 'ON', 63000.00),
+('FutureVision',   505, 'Business Analyst',  'Toronto', 'ON', 80000.00),
+('ByteWorks',      506, 'Game Developer',    'Toronto', 'ON', 98000.00),
+('AlphaPixels',    507, 'Front-end Dev',     'Toronto', 'ON', 72000.00);
+
+-- SpeaksAt(attendeeID, sessionID)
+
+INSERT INTO SpeaksAt VALUES
+(204, 400), 
+(205, 401), 
+(206, 401),
+(207, 402),
+(208, 404),
+(200, 405),
+(205, 405),
+(212, 406);  
