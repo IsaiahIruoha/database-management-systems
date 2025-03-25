@@ -1,0 +1,92 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background: #f6f6f6;
+    padding: 20px;
+    color: #333;
+  }
+  
+  h1, h2 {
+    margin-bottom: 10px;
+  }
+  
+  .container {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  table {
+    border-collapse: collapse;
+    margin-top: 15px;
+    width: 100%;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  select {
+    padding: 5px;
+    width: 200px;
+    max-width: 100%;
+    margin-left: 5px;
+  }
+  
+  input[type="submit"] {
+    padding: 6px 12px;
+    cursor: pointer;
+    border: 1px solid #444;
+    background: #eee;
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+  
+  input[type="submit"]:hover {
+    background: #ddd;
+  }
+  
+  /* link list styling */
+  .nav-list {
+    list-style-type: none;
+    margin-top: 10px;
+  }
+  .nav-list li {
+    margin-bottom: 5px;
+  }
+  
+  .nav-list a {
+    text-decoration: none;
+    color: #0054a6;
+  }
+  
+  .nav-list a:hover {
+    text-decoration: underline;
+  }
+  
+  .return-link {
+    margin-top: 15px;
+    display: inline-block;
+  }
