@@ -6,8 +6,12 @@
 </head>
 <body>
 <div class="container">
-    <h1>Welcome To The Conference Organizer Portal</h1>
-    <img src="your_conference_image.jpg" alt="Conference Image" width="300" style="display:block; margin-bottom:10px;">
+    <h1>Conference Organizer Portal</h1>
+    <p style="margin-bottom: 15px;">
+      This portal allows you to manage all aspects of the conference, 
+      including sub-committees, attendees, sponsors, schedules, and more.
+    </p>
+    <img src="conference.jpg" alt="Conference Banner" style="display: block; margin: 10px auto; max-width: 100%;">
     <p>Select An Action Below:</p>
 
     <ul class="nav-list">

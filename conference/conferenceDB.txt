@@ -80,6 +80,7 @@ CREATE TABLE Sponsor(
   FOREIGN KEY(attendeeID) REFERENCES Attendee(attendeeID)
     ON DELETE CASCADE,
   FOREIGN KEY(companyName) REFERENCES SponsorCompany(companyName)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE JobAd(
